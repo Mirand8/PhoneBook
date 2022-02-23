@@ -14,12 +14,15 @@ namespace ListaTelefonica
         public PhoneList PhoneList { get; set; }
         public Contact Next { get; set; }
 
+        public Contact() { }
+
         public Contact(string name, string email, PhoneList phoneList)
         {
             Name = name;
             Email = email;
             PhoneList = phoneList;
             Next = null;
+            Previous = null;
         }
 
         public override string ToString()

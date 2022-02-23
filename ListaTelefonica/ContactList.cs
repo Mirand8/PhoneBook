@@ -18,147 +18,144 @@ namespace ListaTelefonica
             ItensCount = 0;
         }
 
-        public void Insert(Contact newContact)
-        {
-            if (!IsEmpty())
-            {
-                Tail.Next = newContact;
-                Tail = newContact;
-                Head.Previous = null;
-                Sort();
-            }
-            else
-            {
-                Head = Tail = newContact;
-            }
-            ItensCount++;
-        }
 
-        public void Sort()
-        {
-            for (Contact aux = Head; aux != null; aux = aux.Next)
-            {
-                Contact temp;
-                for (Contact aux2 = Head.Next; aux2 != null; aux2 = aux2.Next)
-                {
-                    if (aux.Name.CompareTo(aux2.Name) > 0)
-                    {
-                        temp = aux;
-                        aux = aux2;
-                        aux2 = temp;
-                    }
-                }
-            }
-        }
-
-        public void Remove(Contact contact)
-        {
-            if (!IsEmpty())
-            {
-
-            }
-            else
-            {
-                Console.WriteLine("A lista esta vazia");
-            }
-        }
 
         public void Print()
         {
             if (IsEmpty())
             {
                 Console.WriteLine("A lista esta vazia!!");
+                return;
+            }
+
+            Contact aux = Head;
+
+            do
+            {
+                Console.WriteLine(aux);
+                Console.ReadKey();
+                aux = aux.Next;
+            } while (aux != null);
+        }
+
+        public Contact Search(string nameSearch)
+        {
+            if (IsEmpty())
+            {
+                return null;
+            }
+
+            Contact contact = Head;
+
+            do
+            {
+                if (contact.Name.Equals(nameSearch.ToUpper()))
+                    return contact;
+
+                contact = contact.Next;
+
+            } while (contact != null);
+
+            return null;
+        }
+
+        public void Insert(Contact newContact)
+        {
+            if (IsEmpty())
+            {
+                Head = newContact;
+                Tail = newContact;
             }
             else
             {
-                Contact aux = Head;
-                do
-                {
-                    Console.WriteLine(aux);
-                    aux = aux.Next;
-                    Console.ReadLine();
-                } while (aux != null);
+                Tail.Next = newContact;
+                newContact.Previous = Tail;
+                Tail = newContact;
             }
+
+            ItensCount++;
+
+            Sort();
         }
 
-        public static void Print(Contact contact)
+        public void Edit(Contact contact)
         {
-            if (contact != null)
-            {
-                Console.WriteLine(contact);
-                Console.ReadKey();
-            }
-            else
-            {
-                Console.WriteLine("Contato nao encontrado!!");
-                Console.ReadKey();
-            }
-        }
+            int option = 0;
 
-        internal void Edit(Contact contact)
-        {
-            Console.Clear();
-            Console.WriteLine("-=-=-=-=-=-=-=-=- EDITOR =-=-=-=-=-=-=-=-=-=");
-            Console.WriteLine(contact);
-            Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
-            Console.WriteLine("Qual informacao deste contato deseja editar?");
-            Console.WriteLine("1. Nome");
-            Console.WriteLine("2. Email");
-            Console.WriteLine("3. Telefone");
-            Console.WriteLine("0. Voltar para o Menu");
-            int option = 4;
-            while (option != 0)
+            do
             {
+                Console.Clear();
+                Console.WriteLine("-=-=-=-=-=-=-=-=- EDITOR =-=-=-=-=-=-=-=-=-=");
+                Console.WriteLine(contact.ToString());
+                Console.WriteLine("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+                Console.WriteLine("Qual informacao deste contato deseja editar?");
+                Console.WriteLine("1. Nome");
+                Console.WriteLine("2. Email");
+                Console.WriteLine("3. Telefone");
+                Console.WriteLine("0. Voltar para o Menu");
+
                 option = int.Parse(Console.ReadLine());
+
                 switch (option)
                 {
                     case 1:
                         Console.WriteLine("Digite o novo nome do contato: ");
-
+                        contact.Name = Console.ReadLine();
                         break;
+
                     case 2:
                         Console.WriteLine("Digite o novo email: ");
                         contact.Email = Console.ReadLine();
                         break;
+
                     case 3:
                         Console.WriteLine("Digite o qual telefone deseja trocar: ");
                         string numberSearch = Console.ReadLine();
                         contact.PhoneList.Edit(contact.PhoneList.Search(Phone.FormatPhone(numberSearch)));
                         break;
                 }
-            }
+
+            } while (option != 0);
+
             Console.ReadKey();
-        }
 
-        internal Contact Search(string nameSearch)
+            Sort();
+        }
+        
+        public void Remove(Contact contact)
         {
-            Contact search = null;
-            bool found = false;
-            if (IsEmpty())
-            {
-                Console.WriteLine("A lista esta vazia!!");
-            }
-            else
-            {
-                Contact aux = Head;
-                do
-                {
-                    if (aux.Name.Equals(nameSearch.ToUpper()))
-                    {
-                        search = aux;
-                        found = true;
-                    }
-                    else
-                    {
-                        search = null;
-                        Console.WriteLine("CONTATO NAO ENCONTRADO!!");
-                    }
-                    aux = aux.Next;
-                } while (aux != null && !found);
-            }
-            return search;
+
         }
 
-        public bool IsEmpty() => Head == null;
+        public void Sort()
+        {
+
+            if (ItensCount <= 1) return;
+
+            for (Contact contact1 = Head; contact1 != null; contact1 = contact1.Next)
+            {
+                for (Contact contact2 = contact1.Next; contact2 != null; contact2 = contact2.Next)
+                {
+                    if (String.Compare(contact1.Name, contact2.Name, StringComparison.CurrentCultureIgnoreCase) > 0)
+                    {
+                        Contact aux = new Contact();
+
+                        aux.Name = contact1.Name;
+                        aux.Email = contact1.Email;
+                        aux.PhoneList = contact1.PhoneList;
+
+                        contact1.Name = contact2.Name;
+                        contact1.Email = contact2.Email;
+                        contact1.PhoneList = contact2.PhoneList;
+
+                        contact2.Name = aux.Name;
+                        contact2.Email = aux.Email;
+                        contact2.PhoneList = aux.PhoneList;
+                    }
+                }
+            }
+        }
+
+        public bool IsEmpty() => Head == null && Tail == null ? true : false;
     }
 }
