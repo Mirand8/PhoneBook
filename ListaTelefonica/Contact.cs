@@ -20,7 +20,10 @@ namespace ListaTelefonica
             Email = email;
             PhoneList = phoneList;
             Next = null;
+            Previous = null;
         }
+        public Contact()
+        { }
 
         public override string ToString()
         {

@@ -14,38 +14,51 @@ namespace ListaTelefonica
 
         public ContactList()
         {
-            Head = Tail = null;
+            Head = null;
+            Tail = null;
             ItensCount = 0;
         }
 
         public void Insert(Contact newContact)
         {
-            if (!IsEmpty())
+            if (IsEmpty())
             {
-                Tail.Next = newContact;
+                Head = newContact;
                 Tail = newContact;
-                Head.Previous = null;
-                Sort();
+
             }
             else
             {
-                Head = Tail = newContact;
+                Tail.Next = newContact;
+                newContact.Previous = Tail;
+                Tail = newContact;
+                Sort();
             }
             ItensCount++;
         }
 
         public void Sort()
         {
-            for (Contact aux = Head; aux != null; aux = aux.Next)
+
+            for (Contact contact1 = Head; contact1 != null; contact1 = contact1.Next)
             {
-                Contact temp;
-                for (Contact aux2 = Head.Next; aux2 != null; aux2 = aux2.Next)
+                for (Contact contact2 = contact1.Next; contact2 != null; contact2 = contact2.Next)
                 {
-                    if (aux.Name.CompareTo(aux2.Name) > 0)
+                    if (contact1.Name.CompareTo(contact2.Name) > 0)
                     {
-                        temp = aux;
-                        aux = aux2;
-                        aux2 = temp;
+                        Contact aux = new Contact();
+                        aux.Name = contact1.Name;
+                        aux.Email = contact1.Email;
+                        aux.PhoneList = contact1.PhoneList;
+
+                        contact1.Name = contact2.Name;
+                        contact1.Email = contact2.Email;
+                        contact1.PhoneList = contact2.PhoneList;
+
+                        contact2.Name = aux.Name;
+                        contact2.Email = aux.Email;
+                        contact2.PhoneList = aux.PhoneList;
+
                     }
                 }
             }
@@ -53,13 +66,13 @@ namespace ListaTelefonica
 
         public void Remove(Contact contact)
         {
-            if (!IsEmpty())
+            if (IsEmpty())
             {
-
+                Console.WriteLine("A lista esta vazia");
             }
             else
             {
-                Console.WriteLine("A lista esta vazia");
+                
             }
         }
 
@@ -81,19 +94,19 @@ namespace ListaTelefonica
             }
         }
 
-        public static void Print(Contact contact)
-        {
-            if (contact != null)
-            {
-                Console.WriteLine(contact);
-                Console.ReadKey();
-            }
-            else
-            {
-                Console.WriteLine("Contato nao encontrado!!");
-                Console.ReadKey();
-            }
-        }
+        /* public static void Print(Contact contact)
+         {
+             if (contact != null)
+             {
+                 Console.WriteLine(contact);
+                 Console.ReadKey();
+             }
+             else
+             {
+                 Console.WriteLine("Contato nao encontrado!!");
+                 Console.ReadKey();
+             }
+         }*/
 
         internal void Edit(Contact contact)
         {
@@ -137,6 +150,7 @@ namespace ListaTelefonica
             if (IsEmpty())
             {
                 Console.WriteLine("A lista esta vazia!!");
+                Console.ReadKey();
             }
             else
             {
@@ -159,6 +173,8 @@ namespace ListaTelefonica
             return search;
         }
 
-        public bool IsEmpty() => Head == null;
+        public bool IsEmpty() => Head == null && Tail == null
+            ? true
+            : false;
     }
 }

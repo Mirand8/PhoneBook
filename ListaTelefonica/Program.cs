@@ -29,7 +29,7 @@ namespace ListaTelefonica
                         Console.Clear();
                         Console.WriteLine("============== PROCURAR ==============\n");
                         Console.WriteLine("\n-- DIGITE O NOME DO CONTATO QUE DESEJA PROCURAR --");
-                        ContactList.Print(contactList.Search(ReadContactName()));
+                        //ContactList.Print(contactList.Search(ReadContactName()));
                         BackToMenuMessage();
                         break;
                     // Remover
@@ -108,27 +108,24 @@ namespace ListaTelefonica
 
         private static PhoneList ReadPhoneList()
         {
-            bool cont = true;
+            
             PhoneList phoneList = new();
-            while (cont)
+            int option =1;
+            while (option !=0)
             {
-                Console.Write("Numero: ");
-                string number = Console.ReadLine();
+                Console.Write("Tipo: ");
+                string type = Console.ReadLine();
                 Console.Write("\tDDD: ");
                 int ddd = int.Parse(Console.ReadLine());
-                Console.Write("\tTipo: ");
-                string type = Console.ReadLine();
+                Console.Write("\nNumero: ");
+                string number = Console.ReadLine();
 
                 Phone phone = new(number, ddd, type.ToUpper());
                 phoneList.Insert(phone);
 
-                Console.Write("Deseja adicionar mais um numero?...\n(0 - Sim, 1 - Nao)");
-                int option = int.Parse(Console.ReadLine());
-
-                if (option == 1)
-                {
-                    cont = false;
-                }
+                Console.Write("Deseja adicionar mais um numero?...\n(1 - Sim, 0 - Nao)");
+                option = int.Parse(Console.ReadLine());
+             
             }
             return phoneList;
         }
