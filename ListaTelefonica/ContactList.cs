@@ -124,7 +124,36 @@ namespace ListaTelefonica
         
         public void Remove(Contact contact)
         {
+            if (Head.Name.Equals(contact.Name))
+            {
+                Head = Head.Next;
+            }
+            else if (Tail.Name.Equals(contact.Name))
+            {
+                Tail = Tail.Previous;
+                Tail.Next = null;
+            }
+            else
+            {
+                
 
+                for (Contact aux = Head; aux != null; aux = aux.Next)
+                {
+                    if (aux.Name.Equals(contact.Name))
+                    {
+                        aux.Next.Previous = aux.Previous;
+                        aux.Previous.Next = aux.Next;
+
+                        break;
+                    }
+
+                    aux = aux.Next;
+                }
+            }
+
+            if (Head == null) Tail = null;
+
+            ItensCount--;
         }
 
         public void Sort()
